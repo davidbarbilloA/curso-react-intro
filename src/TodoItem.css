@@ -1,0 +1,115 @@
+.TodoItem {
+  background-color: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.TodoItem:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+}
+
+.TodoItem--dragging {
+  opacity: 0.3;
+  z-index: 0;
+}
+
+.TodoItem--overlay {
+  cursor: grabbing;
+  box-shadow: var(--shadow-hover);
+  transform: scale(1.05);
+  z-index: 1000;
+  border: 2px solid var(--accent);
+}
+
+.TodoItem-tag {
+  background-color: #fff4e6;
+  color: #ff922b;
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  width: fit-content;
+}
+
+.TodoItem-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.TodoItem-p {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text-main);
+  line-height: 1.5;
+}
+
+.TodoItem-p--completed {
+  text-decoration: line-through;
+  color: var(--text-secondary);
+}
+
+.TodoItem-delete {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  opacity: 0.5;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.TodoItem-delete:hover {
+  opacity: 1;
+  background-color: #fee2e2;
+  color: #ef4444;
+}
+
+.TodoItem-options {
+  display: none;
+}
+
+.TodoItem-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.TodoItem-check {
+    font-size: 18px;
+}
+
+.TodoItem-check-completed {
+    color: var(--success);
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+}
+
+.TodoItem-check-pending {
+    color: var(--warning);
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    animation: spin-slow 3s linear infinite;
+}
+
+/* @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+} */
+

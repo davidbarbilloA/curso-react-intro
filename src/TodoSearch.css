@@ -1,0 +1,25 @@
+.TodoSearch {
+  background: var(--bg-card);
+  border: none;
+  border-radius: 24px;
+  height: 48px;
+  width: 300px;
+  padding: 0 24px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--text-main);
+  box-shadow: var(--shadow);
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.TodoSearch::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.6;
+}
+
+.TodoSearch:focus {
+  box-shadow: var(--shadow-hover);
+  width: 350px;
+}

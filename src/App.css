@@ -1,38 +1,95 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.App-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  gap: 32px;
+  padding: 32px;
+  box-sizing: border-box;
+  background-color: var(--bg-primary);
 }
 
 .App-header {
-  background-color: #233553;
-  min-height: 100vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.App-title {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.App-board {
+  display: flex;
+  gap: 24px;
+  flex: 1;
+  overflow-x: auto;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  align-items: flex-start;
+  padding-bottom: 24px;
+}
+
+.Kanban-column {
   display: flex;
   flex-direction: column;
+  gap: 20px;
+  min-width: 300px;
+}
+
+.Kanban-column-header {
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  padding: 0 8px;
 }
 
-.App-link {
-  color: #97ca3f;
+.Kanban-column-header h2 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-secondary);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+.Kanban-column-header .count {
+  background-color: var(--accent-soft);
+  color: var(--accent);
+  padding: 2px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.Kanban-column-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+  min-height: 100px;
+}
+
+.Empty-state {
+  border: 2px dashed var(--accent-soft);
+  border-radius: var(--radius);
+  padding: 24px;
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 14px;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+@media (max-width: 1024px) {
+  .App-board {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
   }
-  to {
-    transform: rotate(360deg);
+  
+  .Kanban-column {
+    min-width: unset;
   }
 }
