@@ -26,15 +26,47 @@ import {
 } from '@dnd-kit/sortable';
 import { restrictToWindowEdges } from '@dnd-kit/modifiers';
 
+/* 
 const defaultTodos = [
   { id: '1', text: 'Cortar cebolla', status: 'completed' },
   { id: '2', text: 'Tomar curso de intro en React.js', status: 'created' },
   { id: '3', text: 'Llorar con la llorona', status: 'ongoing' },
   { id: '4', text: 'LALALAALA', status: 'completed' }
 ];
+*/
+
+function useLocalStorage(itemName, initialValue){
+  
+  const localStorageItem = localStorage.getItem(itemName);
+  let parsedItem;
+
+  if (!localStorageItem) {
+    localStorage.setItem(itemName, JSON.stringify(initialValue));
+    parsedItem = initialValue;
+  } else {
+    parsedItem = JSON.parse(localStorageItem);
+  }
+
+  const [item, setItem] = React.useState(parsedItem);
+
+  const saveItem = (newItem) => {
+    if (typeof newItem === 'function') {
+      setItem((prev) => {
+        const updated = newItem(prev);
+        localStorage.setItem(itemName, JSON.stringify(updated));
+        return updated;
+      });
+    } else {
+      setItem(newItem);
+      localStorage.setItem(itemName, JSON.stringify(newItem));
+    }
+  };
+
+  return [item, saveItem];
+}
 
 function App() {
-  const [todos, setTodos] = React.useState(defaultTodos);
+  const [todos, saveTodos] = useLocalStorage('TODOS_V1', []);
   const [searchValue, setSearchValue] = React.useState('');
   const [activeId, setActiveId] = React.useState(null);
 
@@ -59,7 +91,7 @@ function App() {
 
   const deleteTodo = (id) => {
     const newTodos = todos.filter(todo => todo.id !== id);
-    setTodos(newTodos);
+    saveTodos(newTodos);
   };
 
   const handleDragStart = (event) => {
@@ -83,7 +115,7 @@ function App() {
       return;
     }
 
-    setTodos((prev) => {
+    saveTodos((prev) => {
       const activeIndex = prev.findIndex(t => t.id === active.id);
       const updatedTodos = [...prev];
       updatedTodos[activeIndex] = { ...updatedTodos[activeIndex], status: overContainer };
@@ -102,7 +134,7 @@ function App() {
       const overContainer = findContainer(over.id);
 
       if (activeContainer === overContainer) {
-        setTodos((items) => {
+        saveTodos((items) => {
           const oldIndex = items.findIndex(t => t.id === active.id);
           const newIndex = items.findIndex(t => t.id === over.id);
 
