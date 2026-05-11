@@ -26,7 +26,6 @@ function TodoItem(props) {
   if (props.isOverlay) {
     return (
       <li className="TodoItem TodoItem--overlay">
-        <div className="TodoItem-tag">Web design</div>
         <div className="TodoItem-header">
           <p className={`TodoItem-p ${props.completed && "TodoItem-p--completed"}`}>
             {props.text}
@@ -48,7 +47,6 @@ function TodoItem(props) {
       style={style}
       className={`TodoItem ${isDragging ? "TodoItem--dragging" : ""}`}
     >
-      <div className="TodoItem-tag" {...attributes} {...listeners}>Web design</div>
       <div className="TodoItem-header">
         <p 
           className={`TodoItem-p ${props.completed && "TodoItem-p--completed"}`}
@@ -68,10 +66,20 @@ function TodoItem(props) {
         </button>
       </div>
 
-      <div className="TodoItem-footer" {...attributes} {...listeners}>
-        <span className={`TodoItem-check ${props.completed ? "TodoItem-check-completed" : "TodoItem-check-pending"}`}>
+      <div className="TodoItem-footer">
+        <span 
+          className={`TodoItem-check ${props.completed ? "TodoItem-check-completed" : "TodoItem-check-pending"}`}
+          onClick={(e) => {
+            e.stopPropagation();
+            props.onToggle && props.onToggle();
+          }}
+          style={{ cursor: 'pointer' }}
+        >
             {props.completed ? <FiCheck /> : <IoReload />}
         </span>
+        <div className="TodoItem-drag-handle" {...attributes} {...listeners}>
+          ⠿
+        </div>
       </div>
     </li>
   );

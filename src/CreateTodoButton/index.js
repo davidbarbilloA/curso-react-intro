@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './CreateTodoButton.css';
 
-function CreateTodoButton() {
+function CreateTodoButton({ addTodo }) {
 
     const [showFrom, setShowFrom] = useState(false);
     const [title, setTitle] = useState('');
@@ -9,16 +9,9 @@ function CreateTodoButton() {
     const handleSubmit = (e) => {
         e.preventDefault();
         
-        const newTodo ={
-            id: Date.now().toString(),
-            text: title,
-            status: 'created',
-        };
+        if (!title.trim()) return;
 
-        const storedTodos = JSON.parse(localStorage.getItem("todos")) || [];
-
-        const updatedTodos = [...storedTodos, newTodo];
-        localStorage.setItem("todos", JSON.stringify(updatedTodos));
+        addTodo(title);
 
         setTitle("");
         setShowFrom(false);

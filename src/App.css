@@ -35,61 +35,9 @@
   padding-bottom: 24px;
 }
 
-.Kanban-column {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  min-width: 300px;
-}
-
-.Kanban-column-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 8px;
-}
-
-.Kanban-column-header h2 {
-  font-size: 18px;
-  font-weight: 600;
-  margin: 0;
-  color: var(--text-secondary);
-}
-
-.Kanban-column-header .count {
-  background-color: var(--accent-soft);
-  color: var(--accent);
-  padding: 2px 12px;
-  border-radius: 20px;
-  font-size: 14px;
-  font-weight: 700;
-}
-
-.Kanban-column-content {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  flex: 1;
-  min-height: 100px;
-}
-
-.Empty-state {
-  border: 2px dashed var(--accent-soft);
-  border-radius: var(--radius);
-  padding: 24px;
-  text-align: center;
-  color: var(--text-secondary);
-  font-size: 14px;
-  background-color: rgba(255, 255, 255, 0.5);
-}
-
 @media (max-width: 1024px) {
   .App-board {
     grid-template-columns: 1fr;
     overflow-y: auto;
-  }
-  
-  .Kanban-column {
-    min-width: unset;
   }
 }

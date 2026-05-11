@@ -84,32 +84,45 @@
 
 .TodoItem-footer {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
     margin-top: 8px;
 }
 
 .TodoItem-check {
     font-size: 18px;
+    display: flex;
+    align-items: center;
 }
 
 .TodoItem-check-completed {
     color: var(--success);
     font-size: 24px;
-    display: flex;
-    align-items: center;
 }
 
 .TodoItem-check-pending {
     color: var(--warning);
     font-size: 20px;
-    display: flex;
-    align-items: center;
-    animation: spin-slow 3s linear infinite;
 }
 
-/* @keyframes spin-slow {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-} */
+.TodoItem-drag-handle {
+  cursor: grab;
+  color: var(--text-secondary);
+  opacity: 0.4;
+  font-size: 20px;
+  user-select: none;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease;
+}
+
+.TodoItem-drag-handle:hover {
+  opacity: 1;
+}
+
+.TodoItem-drag-handle:active {
+  cursor: grabbing;
+}
 

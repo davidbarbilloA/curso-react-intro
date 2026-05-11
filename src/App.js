@@ -3,6 +3,8 @@ import { TodoSearch } from './TodoSearch';
 import { TodoList } from './TodoList';
 import { TodoItem } from './TodoItem';
 import { CreateTodoButton } from './CreateTodoButton';
+import { KanbanColumn } from './KanbanColumn';
+import { useLocalStorage } from './hooks/useLocalStorage';
 import React from 'react';
 import './App.css';
 
@@ -35,35 +37,7 @@ const defaultTodos = [
 ];
 */
 
-function useLocalStorage(itemName, initialValue){
-  
-  const localStorageItem = localStorage.getItem(itemName);
-  let parsedItem;
 
-  if (!localStorageItem) {
-    localStorage.setItem(itemName, JSON.stringify(initialValue));
-    parsedItem = initialValue;
-  } else {
-    parsedItem = JSON.parse(localStorageItem);
-  }
-
-  const [item, setItem] = React.useState(parsedItem);
-
-  const saveItem = (newItem) => {
-    if (typeof newItem === 'function') {
-      setItem((prev) => {
-        const updated = newItem(prev);
-        localStorage.setItem(itemName, JSON.stringify(updated));
-        return updated;
-      });
-    } else {
-      setItem(newItem);
-      localStorage.setItem(itemName, JSON.stringify(newItem));
-    }
-  };
-
-  return [item, saveItem];
-}
 
 function App() {
   const [todos, saveTodos] = useLocalStorage('TODOS_V1', []);
@@ -81,9 +55,13 @@ function App() {
     })
   );
 
-  const filteredTodos = todos.filter(todo =>
-    todo.text.toLowerCase().includes(searchValue.toLowerCase())
-  );
+  const filteredTodos = React.useMemo(() => {
+    return todos.filter(todo => {
+      const todoText = todo.text ? todo.text.toLowerCase() : '';
+      const searchText = searchValue.toLowerCase();
+      return todoText.includes(searchText);
+    });
+  }, [todos, searchValue]);
 
   const createdTodos = filteredTodos.filter(todo => todo.status === 'created');
   const ongoingTodos = filteredTodos.filter(todo => todo.status === 'ongoing');
@@ -91,6 +69,32 @@ function App() {
 
   const deleteTodo = (id) => {
     const newTodos = todos.filter(todo => todo.id !== id);
+    saveTodos(newTodos);
+  };
+
+  const addTodo = (text) => {
+    const newTodo = {
+      id: Date.now().toString(),
+      text,
+      status: 'created',
+    };
+    const newTodos = [...todos, newTodo];
+    saveTodos(newTodos);
+  };
+
+  const toggleTodo = (id) => {
+    const todoIndex = todos.findIndex(todo => todo.id === id);
+    const newTodos = [...todos];
+    const currentStatus = newTodos[todoIndex].status;
+    
+    // Cycle through statuses: created -> ongoing -> completed -> created
+    const statusCycle = {
+      'created': 'ongoing',
+      'ongoing': 'completed',
+      'completed': 'created'
+    };
+    
+    newTodos[todoIndex].status = statusCycle[currentStatus] || 'created';
     saveTodos(newTodos);
   };
 
@@ -117,6 +121,7 @@ function App() {
 
     saveTodos((prev) => {
       const activeIndex = prev.findIndex(t => t.id === active.id);
+      if (activeIndex === -1) return prev;
       const updatedTodos = [...prev];
       updatedTodos[activeIndex] = { ...updatedTodos[activeIndex], status: overContainer };
       return updatedTodos;
@@ -179,18 +184,21 @@ function App() {
             title="Creado"
             todos={createdTodos}
             onDelete={deleteTodo}
+            onToggle={toggleTodo}
           />
           <KanbanColumn
             id="ongoing"
             title="En progreso"
             todos={ongoingTodos}
             onDelete={deleteTodo}
+            onToggle={toggleTodo}
           />
           <KanbanColumn
             id="completed"
             title="Finalizado"
             todos={completedTodos}
             onDelete={deleteTodo}
+            onToggle={toggleTodo}
           />
         </main>
 
@@ -205,41 +213,8 @@ function App() {
         </DragOverlay>
       </DndContext>
 
-      <CreateTodoButton />
+      <CreateTodoButton addTodo={addTodo} />
     </div>
-  );
-}
-
-function KanbanColumn({ id, title, todos, onDelete }) {
-  const { setNodeRef } = useDroppable({ id });
-
-  return (
-    <section className="Kanban-column">
-      <div className="Kanban-column-header">
-        <h2>{title}</h2>
-        <span className="count">{todos.length}</span>
-      </div>
-      <SortableContext
-        id={id}
-        items={todos.map(t => t.id)}
-        strategy={verticalListSortingStrategy}
-      >
-        <div ref={setNodeRef} className="Kanban-column-content">
-          <TodoList>
-            {todos.map(todo => (
-              <TodoItem
-                key={todo.id}
-                id={todo.id}
-                text={todo.text}
-                completed={todo.status === 'completed'}
-                onDelete={() => onDelete(todo.id)}
-              />
-            ))}
-          </TodoList>
-          {todos.length === 0 && <div className="Empty-state">Suelte aquí</div>}
-        </div>
-      </SortableContext>
-    </section>
   );
 }
 
