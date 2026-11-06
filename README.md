@@ -1,75 +1,104 @@
-# Repositorio base del Curso de Introducción a React.js en Platzi
+# Kanban Board – Gestor de tareas con React
 
-¡Hola, Platzinauta!
+Tablero Kanban para organizar tareas en tres columnas, con arrastrar y soltar, búsqueda y contador de progreso. Parte del repositorio base del [Curso de Introducción a React.js de Platzi](https://platzi.com/reactjs) y lo extiende. Las tareas se guardan en `localStorage`, sin backend.
 
-En este repositorio encontrarás el código de todas las clases del [Curso de Introducción a React.js](https://platzi.com/reactjs). Para empezar solo debes clonar este repositorio (`git clone`), instalar sus dependencias (`npm i`) y ejecutar la aplicación (`npm start`).
+## Tech stack
 
-La rama principal contiene el código con el que eempezamos el curso. En las demás ramas encontrarás el código de las siguientes clases y finalmente el deploy de la aplicación.
+| Capa | Tecnologías |
+|------|-------------|
+| **Frontend** | React 18, JavaScript, Create React App (`react-scripts` 5) |
+| **Arrastrar y soltar** | dnd-kit (`core`, `sortable`, `modifiers`, `utilities`) |
+| **Iconos** | React Icons |
+| **Persistencia** | `localStorage` del navegador |
 
-¡Mucha suerte aprendiendo React! #NuncaParesDeAprender
+## Estructura del proyecto
 
-## Getting Started with Create React App
+```text
+curso-react-intro/
+├── public/                  # HTML base, manifest y robots
+├── src/
+│   ├── App.js               # Estado de las tareas y lógica de arrastrar y soltar
+│   ├── CreateTodoButton/    # Botón y formulario para crear tareas
+│   ├── KanbanColumn/        # Columna del tablero
+│   ├── TodoCounter/         # Total, completadas y pendientes
+│   ├── TodoItem/            # Tarjeta de una tarea
+│   ├── TodoList/            # Lista de tareas de una columna
+│   ├── TodoSearch/          # Búsqueda por texto
+│   └── hooks/
+│       └── useLocalStorage.js # Estado sincronizado con localStorage
+├── package.json
+└── README.md
+```
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Funcionalidades
 
-## Available Scripts
+- Tablero con tres columnas: **Creado**, **En progreso** y **Finalizado**
+- Crear y eliminar tareas
+- **Arrastrar y soltar** entre columnas y dentro de una misma columna, con mouse o teclado
+- Cambio rápido de estado en ciclo: `created` → `ongoing` → `completed` → `created`
+- **Búsqueda** por texto
+- **Contador** de tareas totales, completadas y pendientes
+- **Persistencia** en `localStorage` (clave `TODOS_V1`)
 
-In the project directory, you can run:
+## Modelo de datos
 
-### `npm start`
+Cada tarea se guarda como un objeto dentro de un arreglo en `localStorage`:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```json
+{
+  "id": "1730900000000",
+  "text": "Escribir el README",
+  "status": "created"
+}
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Valores de `status`: `created`, `ongoing`, `completed`.
 
-### `npm run build`
+## Instalación y ejecución
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 1. Clonar el repositorio
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bash
+git clone https://github.com/davidbarbilloA/curso-react-intro.git
+cd curso-react-intro
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 2. Instalar dependencias
 
-### `npm run eject`
+**Requisitos:** Node.js 16+
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+```bash
+npm install
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### 3. Servidor de desarrollo (puerto 3000)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```bash
+npm start
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+App disponible en: `http://localhost:3000`
 
-## Learn More
+### Scripts disponibles
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+| Comando | Descripción |
+|---------|-------------|
+| `npm start` | Servidor de desarrollo |
+| `npm run build` | Build de producción en `build/` |
+| `npm run eject` | Expone la configuración de Create React App (irreversible) |
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Flujo típico de uso
 
-### Code Splitting
+1. Crea una tarea con el botón **+**; empieza en la columna **Creado**.
+2. Arrástrala a **En progreso** cuando la empieces y a **Finalizado** cuando termines.
+3. Usa la búsqueda para filtrar el tablero y el contador para ver tu avance.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Build de producción
 
-### Analyzing the Bundle Size
+```bash
+npm run build
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Autor
 
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- [@davidbarbilloA](https://github.com/davidbarbilloA)
